@@ -1,0 +1,10 @@
+version: '3.9'
+services:
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=dbagm
+      - MONGO_INITDB_ROOT_PASSWORD=Dbagm@2024
+    ports:
+      - "27017:27017"
