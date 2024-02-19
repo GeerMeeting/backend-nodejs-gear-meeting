@@ -3,6 +3,7 @@ import NaoEncontrado from '../errors/NaoEncontrado.js';
 import Login from '../schemas/loginSchema.js';
 import LoginService from '../services/loginService.js';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 class LoginController {
   static async listAllLogins(_, res, next) {
@@ -24,8 +25,8 @@ class LoginController {
 
     try {
       const loginFinded = await Login.findById(loginId);
-  
-      if(!loginFinded) {
+
+      if (!loginFinded) {
         return next(NaoEncontrado(`Login not founded by id ${loginId}`));
       }
 
@@ -39,8 +40,8 @@ class LoginController {
     const { email } = req.body;
     try {
       const loginFinded = await Login.findOne({ email });
-  
-      if(!loginFinded) {
+
+      if (!loginFinded) {
         return next(NaoEncontrado(`Login not founded by email ${email}`));
       }
 
@@ -54,15 +55,14 @@ class LoginController {
     const { password, confirmPassword } = req.body;
 
     try {
-      const areSameLogin = await LoginService.validPasswordsConfirmPassword( password, confirmPassword );
-      if(areSameLogin === false) {
-        console.log('entrei');
-        return next(ErroBase('Passwords are different', 402));
+      const areSameLogin = await LoginService.validPasswordsConfirmPassword(password, confirmPassword);
+      if (areSameLogin === false) {
+        return next(new ErroBase('Passwords are different', 402));
       }
 
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
-  
+
       const newLogin = {
         email: req.body.email,
         name: req.body.name,
@@ -72,14 +72,36 @@ class LoginController {
       };
 
       const loginExisted = await Login.findOne({ email: req.body.email });
-      if(loginExisted) {
+      if (loginExisted) {
         return next('Login existed!', 409);
+      } else {
+        const login = new Login(newLogin);
+        await login.save();
+
+        res.status(201).send(login);
       }
 
-      const login = new Login(newLogin);
-      await login.save();
+    } catch (err) {
+      return next(err);
+    }
+  }
 
-      res.status(201).send(login);
+  static async login(req, res, next) {
+    const { email, password } = req.body;
+
+    try {
+      const validEmail = await Login.findOne({ email });
+
+      if (!validEmail) {
+        return next(new NaoEncontrado('Account not found by email'));
+      }
+
+      const validPassword = bcrypt.compare(password, validEmail.password);
+      const token = jwt.sign({ userId: validEmail._id }, 'GearMeetingToken', { expiresIn: '1h' });
+
+      if (validPassword) {
+        res.send({ token, userId: validEmail._id });
+      }
     } catch (err) {
       return next(err);
     }
@@ -93,8 +115,8 @@ class LoginController {
       updatedAt: new Date(),
     };
     try {
-      const loginFinded = await Login.findByIdAndUpdate(loginId, { $set: newLogin});
-      if(!loginFinded) {
+      const loginFinded = await Login.findByIdAndUpdate(loginId, { $set: newLogin });
+      if (!loginFinded) {
         return next(NaoEncontrado(`Login not founded by id ${loginId}`));
       }
 
@@ -110,8 +132,8 @@ class LoginController {
 
     try {
       const loginFinded = await Login.findByIdAndDelete(loginId);
-  
-      if(!loginFinded) {
+
+      if (!loginFinded) {
         return next(NaoEncontrado(`Login not founded by id ${loginId}`));
       }
 
