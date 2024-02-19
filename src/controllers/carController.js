@@ -42,7 +42,7 @@ class CarController {
     };
 
     try {
-      const carExisted = await Car.findOne({ where: { model: req.body.model }});
+      const carExisted = await Car.findOne({ model: req.body.model });
       if(carExisted) {
         return next('Car existed!', 409);
       }
