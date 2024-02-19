@@ -10,7 +10,7 @@ class LoginController {
     try {
       const findLogins = await Login.find();
 
-      if (!findLogins || findLogins < 1) {
+      if (!findLogins || findLogins.length < 1) {
         return next(new NaoEncontrado('No logins found'));
       } else {
         res.send(findLogins);
@@ -97,7 +97,7 @@ class LoginController {
       }
 
       const validPassword = bcrypt.compare(password, validEmail.password);
-      const token = jwt.sign({ userId: validEmail._id }, 'GearMeetingToken', { expiresIn: '1h' });
+      const token = jwt.sign({ userId: validEmail._id }, 'GearMeetingToken', { expiresIn: '38h' });
 
       if (validPassword) {
         res.send({ token, userId: validEmail._id });

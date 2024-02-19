@@ -3,6 +3,8 @@ import car from './carRoute.js';
 import driver from './driverRoute.js';
 import login from './loginRoute.js';
 import ticket from './ticketRoute.js';
+import product from './productRoute.js';
+import store from './storeRoute.js';
 
 const routes = (app) => {
   app.route('/').get((_, res) => {
@@ -14,7 +16,9 @@ const routes = (app) => {
     car,
     driver,
     login,
-    ticket
+    ticket,
+    product,
+    store
   );
 };
 

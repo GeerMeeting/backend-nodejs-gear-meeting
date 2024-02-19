@@ -6,7 +6,7 @@ class CarController {
     try {
       const findCars = await Car.find();
 
-      if (!findCars) {
+      if (!findCars || findCars.length < 1) {
         return next(new NaoEncontrado('No cars found'));
       } else {
         res.send(findCars);

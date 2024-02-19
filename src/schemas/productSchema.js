@@ -1,18 +1,17 @@
 import mongoose from 'mongoose';
 
-const driverSchema = new mongoose.Schema(
+const productSchema = new mongoose.Schema(
   {
     id: { type: String },
     name: { type: String },
     description: { type: String },
-    cars: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Car' }],
     createdAt: { type: Date },
     updatedAt: { type: Date }
-  },
+  }, 
   {
     versionKey: false
   }
 );
 
-const Driver = mongoose.model('Driver', driverSchema);
-export default Driver;
+const Product = mongoose.model('Product', productSchema);
+export default Product;

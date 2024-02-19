@@ -7,7 +7,7 @@ class TicketController {
     try {
       const findTicket = await Ticket.find();
 
-      if (!findTicket) {
+      if (!findTicket || findTicket.length < 1) {
         return next(new NaoEncontrado('No tickets found'));
       } else {
         res.send(findTicket);
