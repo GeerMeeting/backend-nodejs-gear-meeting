@@ -8,6 +8,9 @@ const driverSchema = new mongoose.Schema(
     car: { type: mongoose.Schema.Types.ObjectId, ref: 'Car' },
     createdAt: { type: Date },
     updatedAt: { type: Date }
+  },
+  {
+    versionKey: false
   }
 );
 
