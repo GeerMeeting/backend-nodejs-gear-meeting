@@ -6,7 +6,6 @@ const router = express.Router();
 router
   .get('/logins', LoginController.listAllLogins)
   .get('/logins/:loginId', LoginController.listLoginById)
-  .post('/logins', LoginController.login)
   .post('/logins', LoginController.createLogin)
   .put('/logins/:loginId', LoginController.updateLogin)
   .delete('/logins/:loginId', LoginController.deleteLogin);
