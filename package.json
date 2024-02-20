@@ -5,9 +5,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm run clean && webpack --config webpack.config.js",
+    "clean": "rm -rf dist",
     "dev": "node --watch server.js"
-  },
+  },  
   "repository": {
     "type": "git",
     "url": "git+https://github.com/GeerMeeting/backend-nodejs-gear-meeting.git"
