@@ -20,13 +20,13 @@ class CarController {
     const { carId } = req.params;
 
     try {
-      const carFinded = await Car.findById(carId);
+      const carFound = await Car.findById(carId);
   
-      if(!carFinded) {
+      if(!carFound) {
         return next(NaoEncontrado(`Car not founded by id ${carId}`));
       }
 
-      res.send(carFinded);
+      res.send(carFound);
     } catch (err) {
       return next(err);
     }
@@ -65,8 +65,8 @@ class CarController {
       updatedAt: new Date(),
     };
     try {
-      const carFinded = await Car.findByIdAndUpdate(carId, { $set: newCar});
-      if(!carFinded) {
+      const carFound = await Car.findByIdAndUpdate(carId, { $set: newCar});
+      if(!carFound) {
         return next(NaoEncontrado(`Car not founded by id ${carId}`));
       }
 
@@ -81,9 +81,9 @@ class CarController {
     const { carId } = req.params;
 
     try {
-      const carFinded = await Car.findByIdAndDelete(carId);
+      const carFound = await Car.findByIdAndDelete(carId);
   
-      if(!carFinded) {
+      if(!carFound) {
         return next(NaoEncontrado(`Car not founded by id ${carId}`));
       }
 

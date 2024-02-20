@@ -20,13 +20,13 @@ class ProductController {
     const { productId } = req.params;
 
     try {
-      const productFinded = await Product.findById(productId);
+      const productFound = await Product.findById(productId);
   
-      if(!productFinded) {
+      if(!productFound) {
         return next(NaoEncontrado(`Product not founded by id ${productId}`));
       }
 
-      res.send(productFinded);
+      res.send(productFound);
     } catch (err) {
       return next(err);
     }
@@ -63,8 +63,8 @@ class ProductController {
       updatedAt: new Date(),
     };
     try {
-      const productFinded = await Product.findByIdAndUpdate(productId, { $set: newProduct});
-      if(!productFinded) {
+      const productFound = await Product.findByIdAndUpdate(productId, { $set: newProduct});
+      if(!productFound) {
         return next(NaoEncontrado(`Product not founded by id ${productId}`));
       }
 
@@ -79,9 +79,9 @@ class ProductController {
     const { productId } = req.params;
 
     try {
-      const productFinded = await Product.findByIdAndDelete(productId);
+      const productFound = await Product.findByIdAndDelete(productId);
   
-      if(!productFinded) {
+      if(!productFound) {
         return next(NaoEncontrado(`Product not founded by id ${productId}`));
       }
 

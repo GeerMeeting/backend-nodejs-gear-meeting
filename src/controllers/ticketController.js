@@ -21,13 +21,13 @@ class TicketController {
     const { ticketId } = req.params;
 
     try {
-      const ticketFinded = await Ticket.findById(ticketId);
+      const ticketFound = await Ticket.findById(ticketId);
   
-      if(!ticketFinded) {
+      if(!ticketFound) {
         return next(new NaoEncontrado(`Ticket not founded by id ${ticketId}`));
       }
 
-      res.send(ticketFinded);
+      res.send(ticketFound);
     } catch (err) {
       return next(err);
     }
@@ -64,8 +64,8 @@ class TicketController {
       updatedAt: new Date(),
     };
     try {
-      const ticketFinded = await Ticket.findByIdAndUpdate(ticketId, { $set: newTicket});
-      if(!ticketFinded) {
+      const ticketFound = await Ticket.findByIdAndUpdate(ticketId, { $set: newTicket});
+      if(!ticketFound) {
         return next(new NaoEncontrado(`Ticket not founded by id ${ticketId}`));
       }
 
@@ -80,9 +80,9 @@ class TicketController {
     const { ticketId } = req.params;
 
     try {
-      const ticketFinded = await Ticket.findByIdAndDelete(ticketId);
+      const ticketFound = await Ticket.findByIdAndDelete(ticketId);
   
-      if(!ticketFinded) {
+      if(!ticketFound) {
         return next(new NaoEncontrado(`Ticket not founded by id ${ticketId}`));
       }
 

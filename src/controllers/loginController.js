@@ -24,13 +24,13 @@ class LoginController {
     const { loginId } = req.params;
 
     try {
-      const loginFinded = await Login.findById(loginId);
+      const loginFound = await Login.findById(loginId);
 
-      if (!loginFinded) {
+      if (!loginFound) {
         return next(NaoEncontrado(`Login not founded by id ${loginId}`));
       }
 
-      res.send(loginFinded);
+      res.send(loginFound);
     } catch (err) {
       return next(err);
     }
@@ -39,13 +39,13 @@ class LoginController {
   static async listLoginByEmail(req, res, next) {
     const { email } = req.body;
     try {
-      const loginFinded = await Login.findOne({ email });
+      const loginFound = await Login.findOne({ email });
 
-      if (!loginFinded) {
+      if (!loginFound) {
         return next(NaoEncontrado(`Login not founded by email ${email}`));
       }
 
-      res.send(loginFinded);
+      res.send(loginFound);
     } catch (err) {
       return next(err);
     }
@@ -115,8 +115,8 @@ class LoginController {
       updatedAt: new Date(),
     };
     try {
-      const loginFinded = await Login.findByIdAndUpdate(loginId, { $set: newLogin });
-      if (!loginFinded) {
+      const loginFound = await Login.findByIdAndUpdate(loginId, { $set: newLogin });
+      if (!loginFound) {
         return next(NaoEncontrado(`Login not founded by id ${loginId}`));
       }
 
@@ -131,9 +131,9 @@ class LoginController {
     const { loginId } = req.params;
 
     try {
-      const loginFinded = await Login.findByIdAndDelete(loginId);
+      const loginFound = await Login.findByIdAndDelete(loginId);
 
-      if (!loginFinded) {
+      if (!loginFound) {
         return next(NaoEncontrado(`Login not founded by id ${loginId}`));
       }
 

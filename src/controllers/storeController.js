@@ -20,13 +20,13 @@ class StoreController {
     const { storeId } = req.params;
 
     try {
-      const storeFinded = await Store.findById(storeId);
+      const storeFound = await Store.findById(storeId);
   
-      if(!storeFinded) {
+      if(!storeFound) {
         return next(NaoEncontrado(`Store not founded by id ${storeId}`));
       }
 
-      res.send(storeFinded);
+      res.send(storeFound);
     } catch (err) {
       return next(err);
     }
@@ -66,8 +66,8 @@ class StoreController {
       updatedAt: new Date(),
     };
     try {
-      const storeFinded = await Store.findByIdAndUpdate(storeId, { $set: newStore});
-      if(!storeFinded) {
+      const storeFound = await Store.findByIdAndUpdate(storeId, { $set: newStore});
+      if(!storeFound) {
         return next(NaoEncontrado(`Store not founded by id ${storeId}`));
       }
 
@@ -82,9 +82,9 @@ class StoreController {
     const { storeId } = req.params;
 
     try {
-      const storeFinded = await Store.findByIdAndDelete(storeId);
+      const storeFound = await Store.findByIdAndDelete(storeId);
   
-      if(!storeFinded) {
+      if(!storeFound) {
         return next(NaoEncontrado(`Store not founded by id ${storeId}`));
       }
 

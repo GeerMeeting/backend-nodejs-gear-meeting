@@ -21,13 +21,13 @@ class DriverController {
     const { driverId } = req.params;
 
     try {
-      const driverFinded = await Driver.findById(driverId);
+      const driverFound = await Driver.findById(driverId);
   
-      if(!driverFinded) {
+      if(!driverFound) {
         return next(NaoEncontrado(`Driver not founded by id ${driverId}`));
       }
 
-      res.send(driverFinded);
+      res.send(driverFound);
     } catch (err) {
       return next(err);
     }
@@ -35,15 +35,16 @@ class DriverController {
 
   static async createDriver(req, res, next) {
     try {
-      const carExisted = await Car.findById(req.body.carId);
-      if(!carExisted || carExisted.length < 1) {
-        return next(NaoEncontrado('Car not founded'));
-      }
+      const cars = await Car.find({ _id: { $in: req.body.cars } });
       
+      if(cars.length !== req.body.cars.length) {
+        return next(new NaoEncontrado('One or more cars not found'));
+      }
+
       const newDriver = {
         name: req.body.name,
         description: req.body.description,
-        car: carExisted._id,
+        cars: cars.map(car => car._id),
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -58,6 +59,7 @@ class DriverController {
 
       res.status(201).send(driver);
     } catch (err) {
+      console.error(err);
       return next(err);
     }
   }
@@ -70,8 +72,8 @@ class DriverController {
       updatedAt: new Date(),
     };
     try {
-      const driverFinded = await Driver.findByIdAndUpdate(driverId, { $set: newDriver});
-      if(!driverFinded) {
+      const driverFound = await Driver.findByIdAndUpdate(driverId, { $set: newDriver});
+      if(!driverFound) {
         return next(NaoEncontrado(`Driver not founded by id ${driverId}`));
       }
 
@@ -82,13 +84,43 @@ class DriverController {
     }
   }
 
+  static async addCar(req, res, next){
+    const { driverId } = req.params;
+    
+    try {
+      const driverFound = await Car.findById(driverId);
+
+      if (!driverFound) {
+        return next(new NaoEncontrado(`Driver not found by id ${driverId}`));
+      }
+
+      const cars = await Car.find({ _id: { $in: req.body.cars } });
+  
+      if(cars.length !== req.body.cars.length) {
+        return next(new NaoEncontrado('One or more cars not found'));
+      }
+
+      driverFound.cars.push(...cars.map(car => car._id));
+      driverFound.updatedAt = new Date();
+
+      const updateDriver = await driverFound.save();
+      res.send(updateDriver);
+    } catch (err) {
+      return next(err);
+    }
+  }
+
+  // static async deleteCarFromDriver (req, res, next) {
+
+  // }
+
   static async deleteDriver(req, res, next) {
     const { driverId } = req.params;
 
     try {
-      const driverFinded = await Driver.findByIdAndDelete(driverId);
+      const driverFound = await Driver.findByIdAndDelete(driverId);
   
-      if(!driverFinded) {
+      if(!driverFound) {
         return next(NaoEncontrado(`Driver not founded by id ${driverId}`));
       }
 
