@@ -3,10 +3,22 @@ import mongoose from 'mongoose';
 const loginSchema = new mongoose.Schema(
   {
     id: { type: String },
-    email: { type: String },
-    name: { type: String },
-    password: { type: String },
-    phone: { type: Number },
+    email: { 
+      type: String,
+      required: true
+    },
+    name: { 
+      type: String,
+      required: true
+    },
+    password: { 
+      type: String,
+      required: true
+    },
+    phone: { 
+      type: Number,
+      required: true
+    },
     createdAt: { type: Date },
     updatedAt: { type: Date }
   },
