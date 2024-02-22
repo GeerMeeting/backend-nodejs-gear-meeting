@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "npm run clean && webpack --config webpack.config.js",
+    "build": "npm run clean && node server.js",
     "clean": "rm -rf dist",
     "dev": "node --watch server.js"
   },
