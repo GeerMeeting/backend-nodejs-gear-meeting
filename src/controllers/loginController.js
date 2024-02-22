@@ -66,6 +66,7 @@ class LoginController {
       const newLogin = {
         email: req.body.email,
         name: req.body.name,
+        phone: req.body.phone,
         password: hashedPassword,
         createdAt: new Date(),
         updatedAt: new Date(),

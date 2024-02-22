@@ -1,6 +1,9 @@
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
-mongoose.connect('mongodb://localhost:27017/gearmeeting-dev');
+dotenv.config();
+
+mongoose.connect('mongodb+srv://dbagm:Gear2024@cl-gm-mongodb-dev.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000');
 
 const db = mongoose.connection;
 

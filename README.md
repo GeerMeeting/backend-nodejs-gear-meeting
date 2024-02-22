@@ -10,7 +10,8 @@ BASE_URL and PORT could be used by .env
 *PUBLIC ROUTE*
 
 `/login`
-  * `POST /logins - createLogin`
+  * `POST /login - login`
+  * `POST /register - createLogin`
 
 *PRIVATE ROUTES*
 
@@ -31,7 +32,6 @@ BASE_URL and PORT could be used by .env
 `/logins`
   * `GET /logins - listLogins`
   * `GET /logins/:loginId - findLoginById`
-  * `POST /logins - createLogin`
   * `PUT /logins/:loginId - updateLoginById`
   * `DELETE /logins/:loginId - deleteLoginById`
 

@@ -16,7 +16,7 @@ const app = express();
 app.use(express.json());
 
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: '*',
   methods: 'GET,POST,PUT,DELETE',
   credentials: true,
   optionsSuccessStatus: 204
@@ -24,7 +24,11 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-app.use(express.Router().post('/login', LoginController.login));
+app.use(express.Router()
+  .post('/login', LoginController.login)
+  .post('/register', LoginController.createLogin)
+);
+
 
 app.use(verifyToken);
 routes(app);
