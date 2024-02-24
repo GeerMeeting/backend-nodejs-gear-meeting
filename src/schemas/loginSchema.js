@@ -11,6 +11,15 @@ const loginSchema = new mongoose.Schema(
       type: String,
       required: true
     },
+    nameImage: {
+      type: String,
+    },
+    dataImage: {
+      type: Buffer
+    },
+    contentType: {
+      type: String
+    },
     password: { 
       type: String,
       required: true

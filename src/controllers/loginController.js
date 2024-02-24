@@ -87,6 +87,55 @@ class LoginController {
     }
   }
 
+  static async savePhoto(req, res, next) {
+    const { loginId } = req.params; 
+
+    const newPhoto = {
+      nameImage: req.file.originalname,
+      dataImage: req.file.buffer,
+      contentType: req.file.mimetype,
+    };
+    console.log(newPhoto);
+
+    try {
+      const userExisted = await Login.findByIdAndUpdate(loginId, { $set:  newPhoto });
+
+      if(!userExisted) {
+        return next(new NaoEncontrado('User not recognized'));
+      }
+
+      const userUpdated = await Login.findOne({ _id: loginId });
+      res.status(200).send({ 
+        _id: userUpdated._id,
+        email: userUpdated.email,
+        name: userUpdated.name,
+        password: userUpdated.password,
+        phone: userUpdated.phone,
+        nameImage: userUpdated.nameImage
+      });
+    } catch (e) {
+      return next(e);
+    }
+  }
+
+  static async findPhoto(req, res, next) {
+    const { loginId } = req.params;
+
+    try {
+      const loginExisted = await Login.findById(loginId);
+
+      if(!loginExisted.nameImage) {
+        return next(new NaoEncontrado('Image not found'));
+      }
+
+      res.set('Content-Type', loginExisted.contentType);
+      res.send(loginExisted.dataImage);
+    } catch (e) {
+      console.error(e);
+      return next(e);
+    }
+  }
+
   static async login(req, res, next) {
     const { email, password } = req.body;
 

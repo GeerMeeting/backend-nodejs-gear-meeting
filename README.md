@@ -32,7 +32,9 @@ BASE_URL and PORT could be used by .env
 `/logins`
   * `GET /logins - listLogins`
   * `GET /logins/:loginId - findLoginById`
+  * `GET /logins/:loginId/photo - findPhoto`
   * `PUT /logins/:loginId - updateLoginById`
+  * `PUT /logins/:loginId/photo - savePhoto`
   * `DELETE /logins/:loginId - deleteLoginById`
 
 `/tickets`
