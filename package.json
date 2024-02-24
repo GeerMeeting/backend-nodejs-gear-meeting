@@ -7,7 +7,7 @@
   "scripts": {
     "build": "npm run clean && node server.js",
     "clean": "rm -rf dist",
-    "dev": "node --watch server.js",
+    "dev": "node server.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --verbose"
   },
   "repository": {
