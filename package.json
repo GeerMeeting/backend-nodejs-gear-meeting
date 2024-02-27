@@ -5,8 +5,6 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "npm run clean && npm run start",
-    "clean": "rm -rf dist",
     "start": "node server.js",
     "dev": "node --watch server.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --verbose"
