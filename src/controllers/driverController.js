@@ -33,6 +33,24 @@ class DriverController {
     }
   }
 
+  static async findPhoto(req, res, next) {
+    const { driverId } = req.params;
+
+    try {
+      const driverExisted = await Driver.findById(driverId);
+
+      if(!driverExisted.nameImage) {
+        return next(new NaoEncontrado('Image not found'));
+      }
+
+      res.set('Content-Type', driverExisted.contentType);
+      res.send(driverExisted.dataImage);
+    } catch (e) {
+      console.error(e);
+      return next(e);
+    }
+  }
+
   static async createDriver(req, res, next) {
     try {
       const cars = await Car.find({ _id: { $in: req.body.cars } });
@@ -110,9 +128,34 @@ class DriverController {
     }
   }
 
-  // static async deleteCarFromDriver (req, res, next) {
+  static async savePhoto(req, res, next) {
+    const { driverId } = req.params; 
 
-  // }
+    const newPhoto = {
+      nameImage: req.file.originalname,
+      dataImage: req.file.buffer,
+      contentType: req.file.mimetype,
+    };
+
+    try {
+      const driverExisted = await Driver.findByIdAndUpdate(driverId, { $set:  newPhoto });
+
+      if(!driverExisted) {
+        return next(new NaoEncontrado('Driver not recognized'));
+      }
+
+      const driverUpdated = await Driver.findOne({ _id: driverId });
+      res.status(200).send({ 
+        _id: driverUpdated._id,
+        name: driverUpdated.name,
+        cars: driverUpdated.cars,
+        description: driverUpdated.description,
+        nameImage: driverUpdated.nameImage
+      });
+    } catch (e) {
+      return next(e);
+    }
+  }
 
   static async deleteDriver(req, res, next) {
     const { driverId } = req.params;

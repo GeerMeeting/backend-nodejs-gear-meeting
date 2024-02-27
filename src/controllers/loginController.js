@@ -95,7 +95,6 @@ class LoginController {
       dataImage: req.file.buffer,
       contentType: req.file.mimetype,
     };
-    console.log(newPhoto);
 
     try {
       const userExisted = await Login.findByIdAndUpdate(loginId, { $set:  newPhoto });

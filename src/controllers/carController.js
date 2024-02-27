@@ -32,6 +32,24 @@ class CarController {
     }
   }
 
+  static async findPhoto(req, res, next) {
+    const { carId } = req.params;
+
+    try {
+      const carExisted = await Car.findById(carId);
+
+      if(!carExisted.nameImage) {
+        return next(new NaoEncontrado('Image not found'));
+      }
+
+      res.set('Content-Type', carExisted.contentType);
+      res.send(carExisted.dataImage);
+    } catch (e) {
+      console.error(e);
+      return next(e);
+    }
+  }
+
   static async createCar(req, res, next) {
     const newCar = {
       model: req.body.model,
@@ -53,6 +71,35 @@ class CarController {
       res.status(201).send(car);
     } catch (err) {
       return next(err);
+    }
+  }
+
+  static async savePhoto(req, res, next) {
+    const { carId } = req.params; 
+
+    const newPhoto = {
+      nameImage: req.file.originalname,
+      dataImage: req.file.buffer,
+      contentType: req.file.mimetype,
+    };
+
+    try {
+      const carExisted = await Car.findByIdAndUpdate(carId, { $set:  newPhoto });
+
+      if(!carExisted) {
+        return next(new NaoEncontrado('Car not recognized'));
+      }
+
+      const carUpdated = await Car.findOne({ _id: carId });
+      res.status(200).send({ 
+        _id: carUpdated._id,
+        model: carUpdated.model,
+        brand: carUpdated.brand,
+        description: carUpdated.description,
+        nameImage: carUpdated.nameImage
+      });
+    } catch (e) {
+      return next(e);
     }
   }
 

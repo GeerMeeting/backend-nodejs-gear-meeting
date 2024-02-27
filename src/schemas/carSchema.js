@@ -6,8 +6,11 @@ const carSchema = new mongoose.Schema(
     model: { type: String },
     brand: { type: String },
     description: { type: String },
+    nameImage: { type: String },
+    dataImage: { type: Buffer },
+    contentType: { type: String },
     createdAt: { type: Date },
-    updatedAt: { type: Date }
+    updatedAt: { type: Date },
   },
   {
     versionKey: false

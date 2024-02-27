@@ -32,6 +32,24 @@ class StoreController {
     }
   }
 
+  static async findPhoto(req, res, next) {
+    const { storeId } = req.params;
+
+    try {
+      const storeExisted = await Store.findById(storeId);
+
+      if(!storeExisted.nameImage) {
+        return next(new NaoEncontrado('Image not found'));
+      }
+
+      res.set('Content-Type', storeExisted.contentType);
+      res.send(storeExisted.dataImage);
+    } catch (e) {
+      console.error(e);
+      return next(e);
+    }
+  }
+
   static async createStore(req, res, next) {
     const newStore = {
       name: req.body.name,
@@ -75,6 +93,36 @@ class StoreController {
       res.send(updateStore);
     } catch (err) {
       return next(err);
+    }
+  }
+
+  static async savePhoto(req, res, next) {
+    const { storeId } = req.params; 
+
+    const newPhoto = {
+      nameImage: req.file.originalname,
+      dataImage: req.file.buffer,
+      contentType: req.file.mimetype,
+    };
+
+    try {
+      const storeExisted = await Store.findByIdAndUpdate(storeId, { $set:  newPhoto });
+
+      if(!storeExisted) {
+        return next(new NaoEncontrado('Store not recognized'));
+      }
+
+      const storeUpdated = await Store.findOne({ _id: storeId });
+      res.status(200).send({ 
+        _id: storeUpdated._id,
+        name: storeUpdated.name,
+        description: storeUpdated.description,
+        category: storeUpdated.category,
+        products: storeUpdated.products,
+        nameImage: storeUpdated.nameImage
+      });
+    } catch (e) {
+      return next(e);
     }
   }
 
