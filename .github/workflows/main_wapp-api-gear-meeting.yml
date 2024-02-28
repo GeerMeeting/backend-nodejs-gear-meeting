@@ -1,4 +1,4 @@
-name: Build and deploy Node.js app to Azure Web App - wapp-api-gear-meeting
+name: Main Workflow
 
 on:
   push:
@@ -7,7 +7,23 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  create_pull_request:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: Automatic Pull Request
+          body: |
+            This pull request was automatically generated.
+          branch: main
+
+  build_and_deploy:
+    needs: create_pull_request
     runs-on: ubuntu-latest
 
     steps:
@@ -34,14 +50,14 @@ jobs:
           path: release.zip
 
   deploy:
+    needs: build_and_deploy
     runs-on: ubuntu-latest
-    needs: build
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
       id-token: write 
-      
+
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
@@ -50,7 +66,7 @@ jobs:
 
       - name: Unzip artifact for deployment
         run: unzip release.zip
-      
+
       - name: Login to Azure
         uses: azure/login@v1
         with:
