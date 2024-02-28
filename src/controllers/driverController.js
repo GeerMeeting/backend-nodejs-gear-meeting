@@ -5,11 +5,17 @@ import Driver from '../schemas/driverSchema.js';
 class DriverController {
   static async listDrivers(_, res, next) {
     try {
-      const findDrivers = await Driver.find();
+      let findDrivers = await Driver.find();
 
       if (!findDrivers || findDrivers.length < 1) {
         return next(new NaoEncontrado('No drivers found'));
       } else {
+        findDrivers = findDrivers.map((driver) => {
+          // eslint-disable-next-line no-unused-vars
+          const { dataImage, ...driverWithoutImageData } = driver.toObject();
+          return driverWithoutImageData;
+        });
+
         res.send(findDrivers);
       }
     } catch (err) {
@@ -135,6 +141,7 @@ class DriverController {
       nameImage: req.file.originalname,
       dataImage: req.file.buffer,
       contentType: req.file.mimetype,
+      updatedAt: new Date(),
     };
 
     try {

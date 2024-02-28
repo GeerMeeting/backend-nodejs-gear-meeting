@@ -5,6 +5,7 @@ import login from './loginRoute.js';
 import ticket from './ticketRoute.js';
 import product from './productRoute.js';
 import store from './storeRoute.js';
+import event from './eventRoute.js';
 
 const routes = (app) => {
   app.route('/').get((_, res) => {
@@ -18,7 +19,8 @@ const routes = (app) => {
     login,
     ticket,
     product,
-    store
+    store,
+    event
   );
 };
 

@@ -8,11 +8,16 @@ import jwt from 'jsonwebtoken';
 class LoginController {
   static async listAllLogins(_, res, next) {
     try {
-      const findLogins = await Login.find();
+      let findLogins = await Login.find();
 
       if (!findLogins || findLogins.length < 1) {
         return next(new NaoEncontrado('No logins found'));
       } else {
+        findLogins = findLogins.map((login) => {
+          // eslint-disable-next-line no-unused-vars
+          const {dataImage, ...loginWithoutDataImage} = login.toObject();
+          return loginWithoutDataImage;
+        });
         res.send(findLogins);
       }
     } catch (err) {
@@ -94,6 +99,7 @@ class LoginController {
       nameImage: req.file.originalname,
       dataImage: req.file.buffer,
       contentType: req.file.mimetype,
+      updatedAt: new Date(),
     };
 
     try {

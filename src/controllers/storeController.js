@@ -4,11 +4,16 @@ import Store from '../schemas/storeSchema.js';
 class StoreController {
   static async listStores(_, res, next) {
     try {
-      const findStores = await Store.find();
+      let findStores = await Store.find();
 
       if (!findStores || findStores.length < 1) {
         return next(new NaoEncontrado('No stores found'));
       } else {
+        findStores = findStores((store) => {
+          // eslint-disable-next-line no-unused-vars
+          const {dataImage, ...storeWithoutDataImage} = store.toObject();
+          return storeWithoutDataImage;
+        });
         res.send(findStores);
       }
     } catch (err) {
@@ -103,6 +108,7 @@ class StoreController {
       nameImage: req.file.originalname,
       dataImage: req.file.buffer,
       contentType: req.file.mimetype,
+      updatedAt: new Date(),
     };
 
     try {

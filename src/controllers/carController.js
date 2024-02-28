@@ -4,11 +4,17 @@ import Car from '../schemas/carSchema.js';
 class CarController {
   static async listCars(_, res, next) {
     try {
-      const findCars = await Car.find();
+      let findCars = await Car.find();
 
       if (!findCars || findCars.length < 1) {
         return next(new NaoEncontrado('No cars found'));
       } else {
+        findCars = findCars.map((car) => {
+          // eslint-disable-next-line no-unused-vars
+          const {dataImage, ...carWithoutDataImage} = car.toObject();
+          return carWithoutDataImage;
+        });
+
         res.send(findCars);
       }
     } catch (err) {
@@ -81,6 +87,7 @@ class CarController {
       nameImage: req.file.originalname,
       dataImage: req.file.buffer,
       contentType: req.file.mimetype,
+      updatedAt: new Date(),
     };
 
     try {
