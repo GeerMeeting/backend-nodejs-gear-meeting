@@ -7,23 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  create_pull_request:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          title: Automatic Pull Request
-          body: |
-            This pull request was automatically generated.
-          branch: main
-
-  build_and_deploy:
-    needs: create_pull_request
+  install_and_test:
     runs-on: ubuntu-latest
 
     steps:
@@ -50,7 +34,7 @@ jobs:
           path: release.zip
 
   deploy:
-    needs: build_and_deploy
+    needs: install_and_test
     runs-on: ubuntu-latest
     environment:
       name: 'Production'
