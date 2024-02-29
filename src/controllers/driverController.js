@@ -112,7 +112,7 @@ class DriverController {
     const { driverId } = req.params;
     
     try {
-      const driverFound = await Car.findById(driverId);
+      const driverFound = await Driver.findById(driverId);
 
       if (!driverFound) {
         return next(new NaoEncontrado(`Driver not found by id ${driverId}`));

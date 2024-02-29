@@ -13,6 +13,7 @@ router
   .get('/drivers/:driverId/photo', DriverController.findPhoto)
   .post('/drivers', DriverController.createDriver)
   .put('/drivers/:driverId', DriverController.updateDriver)
+  .put('/drivers/:driverId/cars', DriverController.addCar)
   .put('/drivers/:driverId/photo', upload.single('image'), DriverController.savePhoto)
   .delete('/drivers/:driverId', DriverController.deleteDriver);
 
